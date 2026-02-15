@@ -47,6 +47,21 @@ static bool hook_tf_doesBuildRequireCompatibleWatch(id build) {
 
 %hook TFAppBuild
 
+- (bool)compatible {
+	if (!tweakEnabled) return %orig;
+	return YES;
+}
+
+- (bool)platformCompatible {
+	if (!tweakEnabled) return %orig;
+	return YES;
+}
+
+- (bool)hardwareCompatible {
+	if (!tweakEnabled) return %orig;
+	return YES;
+}
+
 - (long long)compatibilityState {
     if (!tweakEnabled) return %orig;
     return 0;
