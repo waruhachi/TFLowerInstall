@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>headerText</key>
+			<string>Testflight Bypass</string>
+			<key>footerText</key>
+			<string>Bypass "Requires OS Update" in TestFlight and installd. Set a reasonable iOS version to spoof, then tap Apply. The app may crash if it uses APIs not available on your iOS version.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>defaults</key>
+			<string>com.34306.tflowerinstall</string>
+			<key>key</key>
+			<string>enabled</string>
+			<key>label</key>
+			<string>Enabled</string>
+			<key>default</key>
+			<false/>
+			<key>id</key>
+			<string>enabled</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>defaults</key>
+			<string>com.34306.tflowerinstall</string>
+			<key>key</key>
+			<string>forceInstall</string>
+			<key>label</key>
+			<string>Force Download &amp; Install</string>
+			<key>default</key>
+			<false/>
+			<key>id</key>
+			<string>forceInstall</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSEditTextCell</string>
+			<key>defaults</key>
+			<string>com.34306.tflowerinstall</string>
+			<key>key</key>
+			<string>iOSVersion</string>
+			<key>label</key>
+			<string>iOS Version to Spoof</string>
+			<key>placeholder</key>
+			<string>e.g. 18.0</string>
+			<key>id</key>
+			<string>iOSVersion</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Testflight Bypass</string>
+</dict>
+</plist>
