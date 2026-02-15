@@ -1,9 +1,9 @@
-Package: com.34306.tflowerinstall
-Name: tflowerinstall
+Package: moe.waru.tflowerinstall
+Name: TFLowerInstall
 Version: 1.0.0
 Architecture: iphoneos-arm
 Description: Bypass TestFlight OS version requirement checks to install builds targeting newer iOS versions.
-Maintainer: Little 34306
-Author: 34306
+Maintainer: waruhachi
+Author: Little 34306
 Section: Tweaks
 Depends: mobilesubstrate

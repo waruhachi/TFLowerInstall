@@ -5,15 +5,15 @@
 	<key>entry</key>
 	<dict>
 		<key>bundle</key>
-		<string>tflowerinstallprefs</string>
+		<string>TFLowerInstallPreferences</string>
 		<key>cell</key>
 		<string>PSLinkCell</string>
 		<key>detail</key>
-		<string>TFLRootListController</string>
+		<string>TFLowerInstallRootListController</string>
 		<key>isController</key>
 		<true/>
 		<key>label</key>
-		<string>Testflight Bypass</string>
+		<string>TFLowerInstall</string>
 	</dict>
 </dict>
 </plist>

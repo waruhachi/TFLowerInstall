@@ -16,7 +16,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>defaults</key>
-			<string>com.34306.tflowerinstall</string>
+			<string>moe.waru.tflowerinstall</string>
 			<key>key</key>
 			<string>enabled</string>
 			<key>label</key>
@@ -30,7 +30,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>defaults</key>
-			<string>com.34306.tflowerinstall</string>
+			<string>moe.waru.tflowerinstall</string>
 			<key>key</key>
 			<string>forceInstall</string>
 			<key>label</key>
@@ -44,7 +44,7 @@
 			<key>cell</key>
 			<string>PSEditTextCell</string>
 			<key>defaults</key>
-			<string>com.34306.tflowerinstall</string>
+			<string>moe.waru.tflowerinstall</string>
 			<key>key</key>
 			<string>iOSVersion</string>
 			<key>label</key>
@@ -56,6 +56,6 @@
 		</dict>
 	</array>
 	<key>title</key>
-	<string>Testflight Bypass</string>
+	<string>TFLowerInstall</string>
 </dict>
 </plist>

@@ -3,7 +3,7 @@
 #import <objc/runtime.h>
 #import <dlfcn.h>
 
-#define PREF_PATH @"/var/jb/var/mobile/Library/Preferences/com.34306.tflowerinstall.plist"
+#define PREF_PATH @"/var/jb/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist"
 
 @interface MIBundle : NSObject
 - (BOOL)isWatchApp;

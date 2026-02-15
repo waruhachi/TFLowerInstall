@@ -5,9 +5,9 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>English</string>
 	<key>CFBundleExecutable</key>
-	<string>tflowerinstallprefs</string>
+	<string>TFLowerInstallPreferences</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.34306.tflowerinstallprefs</string>
+	<string>moe.waru.tflowerinstall.preferences</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundlePackageType</key>
@@ -19,6 +19,6 @@
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>NSPrincipalClass</key>
-	<string>TFLRootListController</string>
+	<string>TFLowerInstallRootListController</string>
 </dict>
 </plist>
