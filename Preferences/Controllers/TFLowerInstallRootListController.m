@@ -1,10 +1,11 @@
 #import <Foundation/Foundation.h>
+#import <roothide.h>
 #import <spawn.h>
 
 #import "TFLowerInstallRootListController.h"
 
 #define PREF_DOMAIN @"moe.waru.tflowerinstall"
-#define PREF_PATH @THEOS_PACKAGE_INSTALL_PREFIX "/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist"
+#define PREF_PATH jbroot(@"/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist")
 
 extern char **environ;
 

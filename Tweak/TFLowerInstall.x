@@ -2,8 +2,9 @@
 #import <substrate.h>
 #import <objc/runtime.h>
 #import <dlfcn.h>
+#import <roothide.h>
 
-#define PREF_PATH @"/var/jb/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist"
+#define PREF_PATH jbroot(@"/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist")
 
 @interface MIBundle : NSObject
 - (BOOL)isWatchApp;
