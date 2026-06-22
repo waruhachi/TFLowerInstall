@@ -128,7 +128,7 @@ extern char **environ;
 
 	// Kill TestFlight and installd so they pick up new prefs on next launch
 	pid_t pid;
-	const char *killall = ROOT_PATH("/usr/bin/killall");
+	const char *killall = jbroot("/usr/bin/killall");
 
 	char *argv_tf[] = {(char *)killall, "-9", "TestFlight", NULL};
 	int testFlightSpawnResult = posix_spawn(&pid, killall, NULL, NULL, argv_tf, environ);
