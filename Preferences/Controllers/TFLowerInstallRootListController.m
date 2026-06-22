@@ -5,7 +5,7 @@
 #import "TFLowerInstallRootListController.h"
 
 #define PREF_DOMAIN @"moe.waru.tflowerinstall"
-#define PREF_PATH jbroot(@"/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist")
+#define PREF_PATH jbroot(@"/Library/MobileSubstrate/DynamicLibraries/TFLowerInstallPrefs.plist")
 
 extern char **environ;
 
@@ -106,7 +106,7 @@ extern char **environ;
 		[self updateVisibility];
 	}
 
-	// Write plist directly so tweak processes can read it
+	// Mirror the settings into the jailbreak root so injected sandboxed apps can read them.
 	NSMutableDictionary *prefs = [NSMutableDictionary dictionaryWithDictionary:@{
 		@"enabled": @(enabled),
 		@"forceInstall": @(forceInstall),
@@ -116,24 +116,27 @@ extern char **environ;
 		prefs[@"iOSVersion"] = iOSVersion;
 	}
 
-	// Ensure parent directory exists
 	NSString *prefsPath = PREF_PATH;
 	[[NSFileManager defaultManager] createDirectoryAtPath:[prefsPath stringByDeletingLastPathComponent]
 							  withIntermediateDirectories:YES
 											   attributes:nil
 													error:nil];
-
-	[prefs writeToFile:prefsPath atomically:YES];
+	// The packaged mirror is owned by mobile. Write in place because an atomic
+	// replacement would require write access to the root-owned parent directory.
+	BOOL wrotePreferences = [prefs writeToFile:prefsPath atomically:NO];
+	NSLog(@"[TFLowerInstall] Wrote preference mirror to %@: result=%d", prefsPath, wrotePreferences);
 
 	// Kill TestFlight and installd so they pick up new prefs on next launch
 	pid_t pid;
-	const char *killall = "/usr/bin/killall";
+	const char *killall = ROOT_PATH("/usr/bin/killall");
 
 	char *argv_tf[] = {(char *)killall, "-9", "TestFlight", NULL};
-	posix_spawn(&pid, killall, NULL, NULL, argv_tf, environ);
+	int testFlightSpawnResult = posix_spawn(&pid, killall, NULL, NULL, argv_tf, environ);
+	NSLog(@"[TFLowerInstall] Restart TestFlight using %s: posix_spawn=%d", killall, testFlightSpawnResult);
 
 	char *argv_installd[] = {(char *)killall, "-9", "installd", NULL};
-	posix_spawn(&pid, killall, NULL, NULL, argv_installd, environ);
+	int installdSpawnResult = posix_spawn(&pid, killall, NULL, NULL, argv_installd, environ);
+	NSLog(@"[TFLowerInstall] Restart installd using %s: posix_spawn=%d", killall, installdSpawnResult);
 }
 
 @end

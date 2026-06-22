@@ -4,7 +4,7 @@
 #import <roothide.h>
 #import <substrate.h>
 
-#define PREF_PATH jbroot(@"/var/mobile/Library/Preferences/moe.waru.tflowerinstall.plist")
+#define PREF_PATH jbroot(@"/Library/MobileSubstrate/DynamicLibraries/TFLowerInstallPrefs.plist")
 
 @interface MIBundle : NSObject
 - (BOOL)isWatchApp;
@@ -14,11 +14,11 @@ static BOOL tweakEnabled = NO;
 static BOOL forceInstallEnabled = NO;
 static NSString *spoofedVersion = nil;
 
-static void loadPrefs(void) {
-	NSDictionary *prefs = [NSDictionary dictionaryWithContentsOfFile:PREF_PATH];
-	tweakEnabled = [prefs[@"enabled"] boolValue];
-	forceInstallEnabled = [prefs[@"forceInstall"] boolValue];
-	spoofedVersion = prefs[@"iOSVersion"];
+static void loadPrefs(NSString *path) {
+	NSDictionary *preferences = [NSDictionary dictionaryWithContentsOfFile:path];
+	tweakEnabled = [preferences[@"enabled"] boolValue];
+	forceInstallEnabled = [preferences[@"forceInstall"] boolValue];
+	spoofedVersion = [preferences[@"iOSVersion"] copy];
 }
 
 // --- C function hooks (TestFlightServices) ---
@@ -127,9 +127,26 @@ static bool hook_tf_doesBuildRequireCompatibleWatch(id build) {
 	if (!tweakEnabled || !forceInstallEnabled) return %orig;
 	if ([self isWatchApp]) return %orig;
 	if (spoofedVersion != nil) {
-		return %orig(arg1, spoofedVersion, arg3, arg4);
+		BOOL result = %orig(arg1, spoofedVersion, arg3, arg4);
+		NSString *message = [NSString stringWithFormat:
+				@"[TFLowerInstall] MinimumOSVersion check for %@: minimum=%@ actualOS=%@ spoofedOS=%@ requiredOS=%llu result=%d error=%@",
+			self, arg1, arg2, spoofedVersion, arg3, result, arg4 != NULL ? *arg4 : nil];
+		NSLog(@"%@", message);
+		return result;
 	}
 	return %orig;
+}
+
+- (BOOL)_validateWithError:(NSError **)error {
+	BOOL result = %orig;
+	if (tweakEnabled && forceInstallEnabled) {
+		NSError *validationError = error != NULL ? *error : nil;
+		NSString *message = [NSString stringWithFormat:
+				@"[TFLowerInstall] Bundle validation for %@: result=%d error=%@ userInfo=%@",
+			self, result, validationError, validationError.userInfo];
+		NSLog(@"%@", message);
+	}
+	return result;
 }
 
 %end
@@ -138,13 +155,24 @@ static bool hook_tf_doesBuildRequireCompatibleWatch(id build) {
 
 %ctor {
 	@autoreleasepool {
-		loadPrefs();
+		NSString *processName = [[NSProcessInfo processInfo] processName];
+		NSString *constructorMessage = [NSString stringWithFormat:
+				@"[TFLowerInstall] Constructor loaded in %@ (pid=%d)", processName, [[NSProcessInfo processInfo] processIdentifier]];
+		NSLog(@"%@", constructorMessage);
+
+		loadPrefs(PREF_PATH);
+		NSString *preferencesMessage = [NSString stringWithFormat:
+				@"[TFLowerInstall] Preferences loaded: enabled=%d forceInstall=%d spoofedVersion=%@ path=%@",
+			tweakEnabled, forceInstallEnabled, spoofedVersion, PREF_PATH];
+		NSLog(@"%@", preferencesMessage);
 
 		if (!tweakEnabled) return;
 
-		NSString *processName = [[NSProcessInfo processInfo] processName];
-
 		if ([processName isEqualToString:@"installd"]) {
+			NSString *message = [NSString stringWithFormat:
+					@"[TFLowerInstall] Initializing installd hooks (forceInstall=%d, spoofedVersion=%@)",
+				forceInstallEnabled, spoofedVersion];
+			NSLog(@"%@", message);
 			%init(InstalldHooks);
 		} else {
 			// TestFlight process
